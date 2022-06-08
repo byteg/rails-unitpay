@@ -37,7 +37,7 @@ module Unitpay
     end
 
     def calculate_action_sign(method, params)
-      sign_params = params.dup
+      sign_params = params.dup.to_unsafe_hash
       sign_params.delete(:sign)
       sign_params.delete(:signature)
 
