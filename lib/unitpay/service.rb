@@ -7,11 +7,11 @@ module Unitpay
       @base_url = 'https://' + domain + '/pay'
     end
 
-    def payment_url(sum, account, desc, options = {})
-      url(sum, account, desc, options)
+    def payment_url(sum, account, desc, email, phone = nil, options = {})
+      url(sum, account, desc, email, phone, options)
     end
 
-    def payment_params(sum, account, desc, options = {})
+    def payment_params(sum, account, desc, email, phone, options = {})
       main_params(sum, account, desc).merge(extra_params(options))
     end
 
@@ -51,13 +51,15 @@ module Unitpay
       Digest::SHA256.hexdigest(arr.join('{up}'))
     end  
 
-    def main_params(sum, account, desc)
+    def main_params(sum, account, desc, email, phone)
       sign = use_sign ? { signature: calculate_sign(sum, account, desc) } : {}
 
       {
         sum: sum,
         account: account,
         desc: desc,
+        customerEmail: email,
+        customerPhone: phone,
         currency: currency
       }.merge(sign)
     end
@@ -66,8 +68,8 @@ module Unitpay
       options.select { |key, _| EXTRA_OPTIONS.include?(key) }
     end
 
-    def url(sum, account, desc, options)
-      "#{ base_url }/#{ public_key }?#{ to_query(payment_params(sum, account, desc, options)) }"
+    def url(sum, account, desc, email, phone, options)
+      "#{ base_url }/#{ public_key }?#{ to_query(payment_params(sum, account, desc, email, phone, options)) }"
     end
 
     def to_query(hash)
