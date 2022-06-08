@@ -8,7 +8,7 @@ module Unitpay
     end
 
     def payment_url(sum, account, desc, options = {})
-      CGI.escape(url(sum, account, desc, options))
+      url(sum, account, desc, options)
     end
 
     def payment_params(sum, account, desc, options = {})
