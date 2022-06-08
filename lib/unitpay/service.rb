@@ -12,11 +12,11 @@ module Unitpay
     end
 
     def payment_params(sum, account, desc, email, phone, options = {})
-      main_params(sum, account, desc).merge(extra_params(options))
+      main_params(sum, account, desc, email, phone).merge(extra_params(options))
     end
 
-    def params_for_widget(sum, account, desc)
-      main_params(sum, account, desc).merge(publicKey: public_key)
+    def params_for_widget(sum, account, desc, email, phone)
+      main_params(sum, account, desc, email, phone).merge(publicKey: public_key)
     end
 
     def valid_signature?(current_sign, sum, account, desc)
